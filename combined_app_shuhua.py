@@ -195,10 +195,10 @@ def create_streamlit_app():
     st.plotly_chart(choropleth_fig_1, key="choropleth_fig_1")
 
     total_tested = df_filtered[selected_subtype].sum()
-    st.metric(label=f"Positive Samples ({selected_subtype})", value=f"{total_tested:,}", key="total_tested")
+    st.metric(label=f"Positive Samples ({selected_subtype})", value=f"{total_tested:,}")
 
     total_tested_positive = df_filtered[selected_subtype].sum() / df_filtered['SPEC_PROCESSED_NB'].sum()
-    st.metric(label=f"Positive Rate ({selected_subtype})", value=f"{total_tested_positive:.2%}", key="total_positive_rate")
+    st.metric(label=f"Positive Rate ({selected_subtype})", value=f"{total_tested_positive:.2%}")
 
     ## vis 3
     subtypes = st.multiselect('Subtype', subtype_list, default=['AH1N12009'], key="subtypes_multiselect")
@@ -207,7 +207,7 @@ def create_streamlit_app():
     q3_filtered_melted_new_df = q3_filtered_melted_new_df[q3_filtered_melted_new_df['subtype'].isin(subtypes)]
     q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'] = pd.to_datetime(q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'])
 
-    st.subheader(f"Stacked Area Charts of Outbreak Trends of Influenza in {selection_type}: ({', '.join(selected_value)}), Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})", key="area_chart_subheader")
+    st.subheader(f"Stacked Area Charts of Outbreak Trends of Influenza in {selection_type}: ({', '.join(selected_value)}), Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})")
 
     q3_count_chart = alt.Chart(q3_filtered_melted_new_df).mark_area().encode(
         x=alt.X(
