@@ -27,7 +27,7 @@ plotly
 
 
 ## Visualization Features 
-Choropleth Maps: Map of positive influenza cases by country or region.
+/textbf{Choropleth Maps}: Map of positive influenza cases by country or region.
 <img width="637" alt="Screenshot 2024-10-15 at 11 11 53 AM" src="https://github.com/user-attachments/assets/47109e80-007d-4766-bdec-9dcfb2e9f3e9">
 
 
