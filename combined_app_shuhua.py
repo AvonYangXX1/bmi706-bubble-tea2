@@ -262,7 +262,7 @@ def create_streamlit_app():
         if subtype_q4['count'].sum(axis=0) == 0:
             st.write(f"Total count of positive samples is 0 for given subset (year = ({selected_years[0]} - {selected_years[1]}), subtype={ind_subtype}).")
         else:
-            st.subheader(f"Pie Charts of Outbreak Regions of Influenza of Subtype '{ind_subtype}' in Years ({selected_years[0]} - {selected_years[1]})", key=f"pie_chart_subheader_{ind_subtype}")
+            st.subheader(f"Pie Charts of Outbreak Regions of Influenza of Subtype '{ind_subtype}' in Years ({selected_years[0]} - {selected_years[1]})")
             cols = st.columns(2)
             col1 = cols[0]
             with col1:
@@ -278,7 +278,7 @@ def create_streamlit_app():
                         height=300,
                         title='Total counts of positive samples'
                     )
-                st.altair_chart(pie_1, use_container_width=False, key=f"pie_chart_total_{ind_subtype}")
+                st.altair_chart(pie_1, use_container_width=False)
             col2 = cols[1]
             with col2:
                 pie_2 = alt.Chart(subtype_q4).mark_arc(innerRadius=50, outerRadius=90).encode(
@@ -293,7 +293,7 @@ def create_streamlit_app():
                         height=300,
                         title=f'Average positive rates of positive samples'
                     )
-                st.altair_chart(pie_2, use_container_width=False, key=f"pie_chart_rate_{ind_subtype}")
+                st.altair_chart(pie_2, use_container_width=False)
 
 
 # Run the app
