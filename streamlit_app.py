@@ -282,9 +282,9 @@ def create_streamlit_app():
                     labelAlign='center'
                 )
             ),
-            y=alt.Y('positive_rate:Q', title='Positive Rate (%)'),
+            y=alt.Y('mean(positive_rate):Q', title='Positive Rate (%)'),
             color='subtype:N',
-            tooltip=[alt.Tooltip('yearweek(ISO_WEEKSTARTDATE):T', title='Time '), alt.Tooltip('positive_rate:Q', format=".2f"), 'subtype:N']
+            tooltip=[alt.Tooltip('yearweek(ISO_WEEKSTARTDATE):T', title='Time '), alt.Tooltip('mean(positive_rate):Q', format=".2f"), 'subtype:N']
         ).properties(
             width=800,
             height=400,
@@ -293,7 +293,7 @@ def create_streamlit_app():
 
         combined = alt.vconcat(q3_count_chart, q3_positive_rate_chart, data=q3_filtered_melted_new_df)
         st.altair_chart(combined, use_container_width=True)
-        st.write('Positive Rate = number of positive samples for this country in each week / number of total tested samples for this country in each week')
+        st.write('Positive Rate = mean(number of positive samples for this country in each week / number of total tested samples for this country in each week)')
 
 
     ## vis 4
