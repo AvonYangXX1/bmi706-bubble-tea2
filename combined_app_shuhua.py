@@ -226,11 +226,6 @@ def create_streamlit_app():
  # Only keep the top trend plot
     trend_fig = create_trend_plot(new_df_flu, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)))
     st.plotly_chart(trend_fig, key="trend_fig")
-    
-    # Other visualizations (geoplots) remain unchanged
-    df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
-    choropleth_fig = create_choropleth(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
-    st.plotly_chart(choropleth_fig, key="choropleth_fig_2")
 
     ## vis 2
     df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
