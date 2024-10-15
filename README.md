@@ -27,19 +27,22 @@ plotly
 
 
 ## Visualization Features 
-/textbf{Choropleth Maps}: Map of positive influenza cases by country or region.
+**Choropleth Maps**: Map of positive influenza cases by country or region.
 <img width="637" alt="Screenshot 2024-10-15 at 11 11 53 AM" src="https://github.com/user-attachments/assets/47109e80-007d-4766-bdec-9dcfb2e9f3e9">
 
 
 
 
-Trend Line Plot: Line plot showing the trend of positive influenza cases over weeks and years.
+**Trend Line Plot**: Line plot showing the trend of positive influenza cases over weeks and years.
+<img width="627" alt="Screenshot 2024-10-15 at 11 14 18 AM" src="https://github.com/user-attachments/assets/f2b4bdd3-093b-4297-b46e-3fefdaabe45d">
 
 
-Stacked Area Charts: Area charts displaying the distribution of positive cases for various influenza subtypes.
+**Stacked Area Charts**: Area charts displaying the distribution of positive cases for various influenza subtypes.
+<img width="689" alt="Screenshot 2024-10-15 at 11 14 11 AM" src="https://github.com/user-attachments/assets/6a9caa62-c214-4fb6-9f0c-a8e10c59e6f4">
 
 
-Pie Charts: Pie charts showing the regional distribution of positive cases and positive rates.
+**Pie Charts**: Pie charts showing the regional distribution of positive cases and positive rates.
+<img width="586" alt="Screenshot 2024-10-15 at 11 14 13 AM" src="https://github.com/user-attachments/assets/edf59ced-9910-416f-81c6-b0f33147eeb1">
 
 
 
