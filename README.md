@@ -34,6 +34,7 @@ plotly
 
 
 **Trend Line Plot**: Line plot showing the trend of positive influenza cases over weeks and years.
+<img width="580" alt="Screenshot 2024-10-15 at 11 13 55 AM" src="https://github.com/user-attachments/assets/654301b1-fcf2-4bac-96db-b7cd224a4832">
 
 
 **Stacked Area Charts**: Area charts displaying the distribution of positive cases for various influenza subtypes.
@@ -43,5 +44,12 @@ plotly
 **Pie Charts**: Pie charts showing the regional distribution of positive cases and positive rates.
 <img width="586" alt="Screenshot 2024-10-15 at 11 14 13 AM" src="https://github.com/user-attachments/assets/edf59ced-9910-416f-81c6-b0f33147eeb1">
 
+## User Selection 
+The dashboard provides interactive filtering options that allow users to customize the data visualization according to their specific needs. Users can:
+<img width="627" alt="Screenshot 2024-10-15 at 11 14 18 AM" src="https://github.com/user-attachments/assets/fe3f5d45-b6e4-48b6-9d85-ef912a206b2a">
 
+- Select Time Period: Use the year and week sliders to filter the data by a specific range of years and weeks. This allows for a detailed analysis of influenza trends over time.
+- Choose Region Type: Users can select between filtering by country, hemisphere, or WHO region. Depending on the selection, a corresponding list of available regions will be provided to choose from. For instance, selecting "Country" enables a multi-selection option for different countries, while selecting "Hemisphere" or "WHO Region" allows filtering based on those classifications.
+- Influenza Subtypes: Users can select specific influenza subtypes to visualize, such as AH1N12009, AH1, AH3, BVIC, or INF_ALL. This selection controls what data is displayed in the trend plots, choropleth maps, and pie charts. The ability to focus on individual subtypes or combinations of subtypes helps users understand the distribution and impact of specific influenza strains over time and across regions.
+- Positive Rates and Counts: The dashboard allows users to switch between viewing the total count of positive samples or the positive rate (as a percentage of total samples processed), enabling insights into both absolute numbers and relative rates of infection.
 
