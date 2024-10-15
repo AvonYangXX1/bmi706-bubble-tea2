@@ -179,20 +179,38 @@ def create_streamlit_app():
     subtype_list = influenza_a_types + influenza_b_types + ['INF_A', 'INF_B', 'INF_ALL']
     default_single_subtype = subtype_list.index('INF_B')
     selected_subtype = st.selectbox("Select Virus Subtype", options=subtype_list, index=default_single_subtype, key="subtype_selectbox")
+    # Modify this part to handle map and trend plot rendering only once
 
-    ## vis 1
+# Render the trend plot without duplication
     st.title("Visualization of Positive Influenza Samples by Region")
-    trend_fig = create_trend_plot(new_df_flu, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)))
-    st.plotly_chart(trend_fig, key="trend_fig")
-    trend_fig_positive_rate = create_trend_plot(new_df_flu_positive, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)))
-    st.plotly_chart(trend_fig_positive_rate, key="trend_fig_positive_rate")
+    if st.session_state.get("trend_fig") is None:
+        st.session_state.trend_fig = create_trend_plot(new_df_flu, selection_type, selected_value, selected_subtype, 
+                                                    list(range(selected_years[0], selected_years[1] + 1)), 
+                                                    list(range(selected_weeks[0], selected_weeks[1] + 1)))
+    st.plotly_chart(st.session_state.trend_fig)
 
-    ## vis 2
-    df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
-    choropleth_fig = create_choropleth(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
-    st.plotly_chart(choropleth_fig, key="choropleth_fig")
-    choropleth_fig_1 = create_choropleth_positive_rate(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
-    st.plotly_chart(choropleth_fig_1, key="choropleth_fig_1")
+# Render positive rate trend plot
+    if st.session_state.get("trend_fig_positive_rate") is None:
+        st.session_state.trend_fig_positive_rate = create_trend_plot(new_df_flu_positive, selection_type, selected_value, 
+                                                                 selected_subtype, 
+                                                                 list(range(selected_years[0], selected_years[1] + 1)), 
+                                                                 list(range(selected_weeks[0], selected_weeks[1] + 1)))
+    st.plotly_chart(st.session_state.trend_fig_positive_rate)
+
+# Render the choropleth maps
+    if st.session_state.get("choropleth_fig") is None:
+        df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
+    st.session_state.choropleth_fig = create_choropleth(df_filtered, 
+                                                        f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", 
+                                                        selected_subtype, subtype_list)
+    st.plotly_chart(st.session_state.choropleth_fig)
+
+    if st.session_state.get("choropleth_fig_1") is None:
+        st.session_state.choropleth_fig_1 = create_choropleth_positive_rate(df_filtered, 
+                                                                        f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", 
+                                                                        selected_subtype, subtype_list)
+    st.plotly_chart(st.session_state.choropleth_fig_1)
+
 # Remove the key from st.metric()
     total_tested = df_filtered[selected_subtype].sum()
     st.metric(label=f"Positive Samples ({selected_subtype})", value=f"{total_tested:,}")
