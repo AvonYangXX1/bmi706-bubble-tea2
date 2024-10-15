@@ -18,19 +18,15 @@ It includes information about influenza subtypes, regions, countries, WHO classi
 
 
 ## Getting Started
-Please create a conda environment with required packages specified in `requirements.txt`:
-
+Please use python (>=3.8) and install packages including:
 ```
-conda create --name influenza_vis --file requirements.txt
-```
-
-Then, activate this environment:
-
-```
-conda activate influenza_vis
+plotly
+pandas
+streamlit
+altair
 ```
 
-Finally, run streamlit locally to visualize the data:
+Run streamlit locally to visualize the data:
 
 ```
 streamlit run streamlit_app.py
