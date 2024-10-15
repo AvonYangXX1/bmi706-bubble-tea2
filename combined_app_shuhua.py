@@ -181,7 +181,7 @@ def create_streamlit_app():
     selected_subtype = st.selectbox("Select Virus Subtype", options=subtype_list, index=default_single_subtype, key="subtype_selectbox")
 
     ## vis 1
-    st.title("Visualization of Positive Influenza Samples by Region", key="main_title")
+    st.title("Visualization of Positive Influenza Samples by Region")
     trend_fig = create_trend_plot(new_df_flu, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)))
     st.plotly_chart(trend_fig, key="trend_fig")
     trend_fig_positive_rate = create_trend_plot(new_df_flu_positive, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)))
