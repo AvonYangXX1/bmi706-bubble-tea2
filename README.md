@@ -34,7 +34,6 @@ plotly
 
 
 **Trend Line Plot**: Line plot showing the trend of positive influenza cases over weeks and years.
-<img width="627" alt="Screenshot 2024-10-15 at 11 14 18 AM" src="https://github.com/user-attachments/assets/f2b4bdd3-093b-4297-b46e-3fefdaabe45d">
 
 
 **Stacked Area Charts**: Area charts displaying the distribution of positive cases for various influenza subtypes.
