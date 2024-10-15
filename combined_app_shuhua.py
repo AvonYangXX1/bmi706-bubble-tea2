@@ -230,7 +230,7 @@ def create_streamlit_app():
     # Other visualizations (geoplots) remain unchanged
     df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
     choropleth_fig = create_choropleth(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
-    st.plotly_chart(choropleth_fig, key="choropleth_fig")
+    st.plotly_chart(choropleth_fig, key="choropleth_fig_2")
 
     ## vis 2
     df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
