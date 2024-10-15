@@ -326,17 +326,18 @@
 #                 )
 #             st.altair_chart(pie_2, use_container_width=False)
 
-import pandas as pd
-import plotly.express as px
-import streamlit as st
+
 import altair as alt
+import pandas as pd
+import streamlit as st
+import plotly.express as px
 
 # Load the dataset
 def load_data():
     df = pd.read_csv('VIW_FNT.csv', low_memory=False)
     return df
 
-# Clean the dataset
+# Fill missing values with zeros for numeric columns, assuming NaN means no detections
 def clean_data(df):
     df_filled = df.fillna({
         'AH1N12009': 0, 'AH1': 0, 'AH3': 0, 'AH5': 0, 'AH7N9': 0, 'AOTHER_SUBTYPE': 0,
@@ -347,7 +348,7 @@ def clean_data(df):
     df_filled = df_filled.dropna(subset=['HEMISPHERE'])
     return df_filled
 
-# Filter data based on user selections
+# Filter data based on the year, week, selected regions, and virus subtype
 def filter_data(df, year, week, selection_type, selection_value, subtype):
     df_filtered = df[(df['ISO_YEAR'] == year) & (df['ISO_WEEK'] == week)]
     if selection_type == 'Country':
@@ -358,11 +359,11 @@ def filter_data(df, year, week, selection_type, selection_value, subtype):
         df_filtered = df_filtered[df_filtered['WHOREGION'].isin(selection_value)]
     return df_filtered
 
-# Create a choropleth map
+# Create a choropleth map using Plotly Express
 def create_choropleth(df_filtered, selected_year_week, subtype):
     fig = px.choropleth(
         df_filtered,
-        locations="COUNTRY_CODE",
+        locations="COUNTRY_CODE",  # Assuming 'COUNTRY_CODE' column has ISO 3-letter codes
         color=subtype,
         hover_name="COUNTRY_AREA_TERRITORY",
         hover_data=[subtype],
@@ -411,14 +412,23 @@ def main():
     df = load_data()
     df_cleaned = clean_data(df)
     
-    # Sidebar options for map or pie charts
+    # Shared sidebar selections for year, week, and region
+    year = st.sidebar.slider("Select Year", int(df_cleaned['ISO_YEAR'].min()), int(df_cleaned['ISO_YEAR'].max()))
+    week = st.sidebar.slider("Select Week", 1, 52)
+    selection_type = st.sidebar.selectbox("Select by", ["Country", "Hemisphere", "WHO Region"])
+    
+    # Adjusting the selection_value based on selection_type
+    if selection_type == "Country":
+        selection_value = st.sidebar.multiselect(f"Select {selection_type}", df_cleaned['COUNTRY_AREA_TERRITORY'].unique())
+    elif selection_type == "Hemisphere":
+        selection_value = st.sidebar.multiselect(f"Select {selection_type}", df_cleaned['HEMISPHERE'].unique())
+    else:
+        selection_value = st.sidebar.multiselect(f"Select {selection_type}", df_cleaned['WHOREGION'].unique())
+    
+    # Sidebar option for visualization type
     option = st.sidebar.selectbox("Select Visualization Type", ("Choropleth Map", "Pie Charts"))
     
     if option == "Choropleth Map":
-        year = st.sidebar.slider("Select Year", int(df_cleaned['ISO_YEAR'].min()), int(df_cleaned['ISO_YEAR'].max()))
-        week = st.sidebar.slider("Select Week", 1, 52)
-        selection_type = st.sidebar.selectbox("Select by", ["Country", "Hemisphere", "WHO Region"])
-        selection_value = st.sidebar.multiselect(f"Select {selection_type}", df_cleaned[selection_type].unique())
         subtype = st.sidebar.selectbox("Select Subtype", df_cleaned.columns[7:18])
         
         # Filter and display map
