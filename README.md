@@ -18,7 +18,7 @@ It includes information about influenza subtypes, regions, countries, WHO classi
 
 
 ## Getting Started
-Please create an environment with required packages specified in `requirements.txt` in conda:
+Please create aconda environment with required packages specified in `requirements.txt`:
 
 ```
 conda create --name influenza_vis --file requirements.txt
