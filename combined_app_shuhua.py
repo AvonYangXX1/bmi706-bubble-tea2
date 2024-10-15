@@ -1,8 +1,18 @@
+
+"""
+Author: Siying (Avon) Yang, Shuhua Xu
+Email: avon_yang@hms.harvard.edu, shuhuaxu@hsph.harvard.edu
+Date: 2024 Oct 15
+"""
+
+
+# Import Necessary Packages 
 import altair as alt # type: ignore
 import pandas as pd # type: ignore
 import streamlit as st # type: ignore
 import plotly.express as px
 import plotly.graph_objects as go
+
 
 # Load the dataset
 @st.cache_data
@@ -62,6 +72,7 @@ def clean_data(flu_df, influenza_a_types, influenza_b_types, statistics, id_vars
 
     return new_df_flu, new_df_flu_positive, melted_new_df
 
+
 # Filter data based on the year, week, selected regions
 def filter_data(df, year, week, selection_type, selection_value):
     df_filtered = df[(df['ISO_YEAR']>=year[0]) & (df['ISO_YEAR']<=year[1]) & (df['ISO_WEEK']>=week[0]) & (df['ISO_WEEK']<=week[1])]
@@ -72,6 +83,7 @@ def filter_data(df, year, week, selection_type, selection_value):
     elif selection_type == 'WHO Region':
         df_filtered = df_filtered[df_filtered['WHOREGION'].isin(selection_value)]
     return df_filtered
+
 
 # Create a choropleth map using Plotly Express
 def create_choropleth(df_filtered, selected_year_week, subtype, subtype_list):
@@ -96,6 +108,7 @@ def create_choropleth(df_filtered, selected_year_week, subtype, subtype_list):
     )
     fig.update_geos(showcoastlines=True, showframe=False, visible=True)
     return fig
+
 
 def create_choropleth_positive_rate(df_filtered, selected_year_week, subtype, subtype_list):
     agg_dict = {col: 'sum' for col in subtype_list+['SPEC_PROCESSED_NB',]}
@@ -147,6 +160,7 @@ def create_choropleth_positive_rate(df_filtered, selected_year_week, subtype, su
 #         hovermode="x unified"
 #     )
 #     return fig
+
 # Create a line plot with brush functionality (trend plot)
 def create_trend_plot(df, selection_type, selection_value, subtype, years, weeks):
     # Filter data by the selected years and weeks
@@ -180,7 +194,6 @@ def create_trend_plot(df, selection_type, selection_value, subtype, years, weeks
         yaxis_title="Number of Positive Samples",
         hovermode="x unified"
     )
-    
     return fig
 
 
@@ -233,7 +246,7 @@ def create_streamlit_app():
     st.plotly_chart(choropleth_fig, key="choropleth_fig")
     choropleth_fig_1 = create_choropleth_positive_rate(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
     st.plotly_chart(choropleth_fig_1, key="choropleth_fig_1")
-# Remove the key from st.metric()
+
     total_tested = df_filtered[selected_subtype].sum()
     st.metric(label=f"Positive Samples ({selected_subtype})", value=f"{total_tested:,}")
 
@@ -243,7 +256,6 @@ def create_streamlit_app():
 
     ## vis 3
     subtypes = st.multiselect('Subtype', subtype_list, default=['AH1N12009'], key="subtypes_multiselect")
-
     q3_filtered_melted_new_df = filter_data(melted_new_df, selected_years, selected_weeks, selection_type, selected_value)
     q3_filtered_melted_new_df = q3_filtered_melted_new_df[q3_filtered_melted_new_df['subtype'].isin(subtypes)]
     q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'] = pd.to_datetime(q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'])
