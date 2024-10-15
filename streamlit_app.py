@@ -225,6 +225,7 @@ def create_streamlit_app():
     st.plotly_chart(choropleth_fig, key="choropleth_fig")
     choropleth_fig_1 = create_choropleth_positive_rate(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
     st.plotly_chart(choropleth_fig_1, key="choropleth_fig_1")
+    st.write('Positive Rates = number of positive samples for each selected country in the selected ranges of years and weeks / number of total tested samples for each selected country in the selected ranges of years and weeks')
 
     total_tested_positive = df_filtered[selected_subtype].sum()
     st.metric(label=f"Positive Samples ({selected_subtype})", value=f"{total_tested_positive:,}")
@@ -235,6 +236,7 @@ def create_streamlit_app():
     total_tested_positive_rate = df_filtered[selected_subtype].sum() / df_filtered['SPEC_PROCESSED_NB'].sum()
     st.metric(label=f"Positive Rate ({selected_subtype})", value=f"{total_tested_positive_rate:.2%}")
 
+    st.write('Positive Rate = number of positive samples for all selected countries in the selected ranges of years and weeks / number of total tested samples for all selected countries in the selected ranges of years and weeks')
 
     ## vis 3
     
@@ -291,6 +293,7 @@ def create_streamlit_app():
 
         combined = alt.vconcat(q3_count_chart, q3_positive_rate_chart, data=q3_filtered_melted_new_df)
         st.altair_chart(combined, use_container_width=True)
+        st.write('Positive Rate = number of positive samples for this country in each week / number of total tested samples for this country in each week')
 
 
     ## vis 4
