@@ -14,20 +14,20 @@ def load_data():
 @st.cache_data
 def clean_data(flu_df, influenza_a_types, influenza_b_types, statistics, id_vars):
     # drop na for some columns
-    flu_df = flu_df.dropna(subset=['FLUSEASON'], axis=0)
+    flu_df = flu_df.dropna(subset=['FLUSEASON'],axis=0)
 
     # a new df
-    new_df_flu = flu_df[id_vars + influenza_a_types + influenza_b_types + statistics]
+    new_df_flu = flu_df[id_vars+influenza_a_types+influenza_b_types+statistics]
 
     # select the data with spec_processed_nb not na or 0
-    new_df_flu = new_df_flu.dropna(subset=['SPEC_PROCESSED_NB'], axis=0)
-    new_df_flu = new_df_flu[new_df_flu['SPEC_PROCESSED_NB'] != 0]
+    new_df_flu = new_df_flu.dropna(subset=['SPEC_PROCESSED_NB'],axis=0)
+    new_df_flu = new_df_flu[new_df_flu['SPEC_PROCESSED_NB']!=0]
 
     # fill na
-    new_df_flu[influenza_a_types + influenza_b_types] = new_df_flu[influenza_a_types + influenza_b_types].fillna(0)
+    new_df_flu[influenza_a_types+influenza_b_types] = new_df_flu[influenza_a_types+influenza_b_types].fillna(0)
     new_df_flu['INF_A'] = new_df_flu['INF_A'].fillna(new_df_flu[influenza_a_types].sum(axis=1))
     new_df_flu['INF_B'] = new_df_flu['INF_B'].fillna(new_df_flu[influenza_b_types].sum(axis=1))
-    new_df_flu['INF_ALL'] = new_df_flu['INF_ALL'].fillna(new_df_flu[['INF_A', 'INF_B']].sum(axis=1))
+    new_df_flu['INF_ALL'] = new_df_flu['INF_ALL'].fillna(new_df_flu[['INF_A','INF_B']].sum(axis=1))
 
     # filter some problematic rows with positive rate > 100% or with errors in calculation of INF_ALL
     for flu_type in influenza_a_types + influenza_b_types + ['INF_A', 'INF_B', 'INF_ALL']:
@@ -42,21 +42,21 @@ def clean_data(flu_df, influenza_a_types, influenza_b_types, statistics, id_vars
         condition = new_df_flu[flu_type] > new_df_flu['INF_B']
         new_df_flu = new_df_flu[~condition]
 
-    condition = new_df_flu['INF_A'] + new_df_flu['INF_B'] != new_df_flu['INF_ALL']
+    condition = new_df_flu['INF_A']+new_df_flu['INF_B'] != new_df_flu['INF_ALL']
     new_df_flu = new_df_flu[~condition]
 
     # calculate positive rate
     new_df_flu_positive = new_df_flu.copy()
-    for col in influenza_a_types + influenza_b_types + statistics:
+    for col in influenza_a_types+influenza_b_types+statistics:
         new_df_flu_positive[col] = new_df_flu[col] / new_df_flu['SPEC_PROCESSED_NB']
 
     # melt df
-    melted_counts = new_df_flu.melt(id_vars=id_vars, var_name='subtype', value_name='count',
-                                    value_vars=influenza_a_types + influenza_b_types + statistics)
+    melted_counts = new_df_flu.melt(id_vars=id_vars,var_name='subtype', value_name='count', 
+                            value_vars=influenza_a_types+influenza_b_types+statistics)
 
-    melted_positive_rates = new_df_flu_positive.melt(var_name='subtype', value_name='positive_rate',
-                                                     value_vars=influenza_a_types + influenza_b_types + statistics)
-
+    melted_positive_rates = new_df_flu_positive.melt(var_name='subtype', value_name='positive_rate', 
+                                    value_vars=influenza_a_types+influenza_b_types+statistics)
+    
     melted_new_df = melted_counts.copy()
     melted_new_df['positive_rate'] = melted_positive_rates['positive_rate']
 
@@ -64,7 +64,7 @@ def clean_data(flu_df, influenza_a_types, influenza_b_types, statistics, id_vars
 
 # Filter data based on the year, week, selected regions
 def filter_data(df, year, week, selection_type, selection_value):
-    df_filtered = df[(df['ISO_YEAR'] >= year[0]) & (df['ISO_YEAR'] <= year[1]) & (df['ISO_WEEK'] >= week[0]) & (df['ISO_WEEK'] <= week[1])]
+    df_filtered = df[(df['ISO_YEAR']>=year[0]) & (df['ISO_YEAR']<=year[1]) & (df['ISO_WEEK']>=week[0]) & (df['ISO_WEEK']<=week[1])]
     if selection_type == 'Country':
         df_filtered = df_filtered[df_filtered['COUNTRY_AREA_TERRITORY'].isin(selection_value)]
     elif selection_type == 'Hemisphere':
@@ -75,8 +75,10 @@ def filter_data(df, year, week, selection_type, selection_value):
 
 # Create a choropleth map using Plotly Express
 def create_choropleth(df_filtered, selected_year_week, subtype, subtype_list):
-    agg_dict = {col: 'sum' for col in subtype_list + ['SPEC_PROCESSED_NB']}
-    agg_dict.update({'COUNTRY_AREA_TERRITORY': 'first'})
+    agg_dict = {col: 'sum' for col in subtype_list+['SPEC_PROCESSED_NB',]}
+    agg_dict.update({
+        'COUNTRY_AREA_TERRITORY': 'first'
+    })
 
     # Group by 'country' and aggregate
     df_counts_group_by_country = df_filtered.groupby('COUNTRY_CODE', as_index=False).agg(agg_dict)
@@ -93,6 +95,57 @@ def create_choropleth(df_filtered, selected_year_week, subtype, subtype_list):
         projection="natural earth"
     )
     fig.update_geos(showcoastlines=True, showframe=False, visible=True)
+    return fig
+
+def create_choropleth_positive_rate(df_filtered, selected_year_week, subtype, subtype_list):
+    agg_dict = {col: 'sum' for col in subtype_list+['SPEC_PROCESSED_NB',]}
+    agg_dict.update({
+        'COUNTRY_AREA_TERRITORY': 'first'
+    })
+
+    # Group by 'country' and aggregate
+    df_counts_group_by_country = df_filtered.groupby('COUNTRY_CODE', as_index=False).agg(agg_dict)
+    # calculate positive rate
+    for col in subtype_list:
+        df_counts_group_by_country[col] = df_counts_group_by_country[col]/df_counts_group_by_country['SPEC_PROCESSED_NB']
+
+    fig = px.choropleth(
+        df_counts_group_by_country,
+        locations="COUNTRY_CODE",  # Assuming 'COUNTRY_CODE' column has ISO 3-letter codes
+        color=subtype,
+        hover_name="COUNTRY_AREA_TERRITORY",
+        hover_data=[subtype],
+        title=f"Positive Samples by {subtype} - {selected_year_week}",
+        labels={subtype: 'Positive Samples (Count)'},
+        color_continuous_scale="Blues",
+        projection="natural earth"
+    )
+    fig.update_geos(showcoastlines=True, showframe=False, visible=True)
+    return fig
+
+# Create a line plot with brush functionality (trend plot)
+def create_trend_plot(df, selection_type, selection_value, subtype, years, weeks):
+    df_filtered = df[(df['ISO_YEAR'].isin(years)) & (df['ISO_YEAR'].isin(weeks))]  # Filter data by the selected years and weeks
+    if selection_type == 'Country':
+        df_filtered = df_filtered[df_filtered['COUNTRY_AREA_TERRITORY'].isin(selection_value)]
+    elif selection_type == 'Hemisphere':
+        df_filtered = df_filtered[df_filtered['HEMISPHERE'].isin(selection_value)]
+    elif selection_type == 'WHO Region':
+        df_filtered = df_filtered[df_filtered['WHOREGION'].isin(selection_value)]
+    # Sort by week to ensure the lines are connected sequentially
+    df_filtered = df_filtered.sort_values(by=['ISO_YEAR', 'ISO_WEEK'])
+    # Create the line plot
+    fig = go.Figure()
+    for year in years:
+        df_year = df_filtered[df_filtered['ISO_YEAR'] == year]
+        fig.add_trace(go.Scatter(x=df_year['ISO_WEEK'], y=df_year[subtype], mode='lines+markers', name=str(year)))
+    # Update layout
+    fig.update_layout(
+        title=f"Trend of Positive Samples for {subtype} by Week",
+        xaxis_title="Week",
+        yaxis_title="Number of Positive Samples",
+        hovermode="x unified"
+    )
     return fig
 
 # Streamlit layout and filters
