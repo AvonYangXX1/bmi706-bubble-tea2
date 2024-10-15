@@ -18,7 +18,7 @@ It includes information about influenza subtypes, regions, countries, WHO classi
 
 
 ## Getting Started
-Please create aconda environment with required packages specified in `requirements.txt`:
+Please create a conda environment with required packages specified in `requirements.txt`:
 
 ```
 conda create --name influenza_vis --file requirements.txt
@@ -30,7 +30,7 @@ Then, activate this environment:
 conda activate influenza_vis
 ```
 
-Then, run streamlit locally to visualize the data:
+Finally, run streamlit locally to visualize the data:
 
 ```
 streamlit run streamlit_app.py
