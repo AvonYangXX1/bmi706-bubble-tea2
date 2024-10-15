@@ -193,12 +193,13 @@ def create_streamlit_app():
     st.plotly_chart(choropleth_fig, key="choropleth_fig")
     choropleth_fig_1 = create_choropleth_positive_rate(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
     st.plotly_chart(choropleth_fig_1, key="choropleth_fig_1")
-
+# Remove the key from st.metric()
     total_tested = df_filtered[selected_subtype].sum()
     st.metric(label=f"Positive Samples ({selected_subtype})", value=f"{total_tested:,}")
 
     total_tested_positive = df_filtered[selected_subtype].sum() / df_filtered['SPEC_PROCESSED_NB'].sum()
     st.metric(label=f"Positive Rate ({selected_subtype})", value=f"{total_tested_positive:.2%}")
+
 
     ## vis 3
     subtypes = st.multiselect('Subtype', subtype_list, default=['AH1N12009'], key="subtypes_multiselect")
