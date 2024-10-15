@@ -123,22 +123,56 @@ def create_choropleth_positive_rate(df_filtered, selected_year_week, subtype, su
     fig.update_geos(showcoastlines=True, showframe=False, visible=True)
     return fig
 
+# # Create a line plot with brush functionality (trend plot)
+# def create_trend_plot(df, selection_type, selection_value, subtype, years, weeks):
+#     df_filtered = df[(df['ISO_YEAR'].isin(years)) & (df['ISO_YEAR'].isin(weeks))]  # Filter data by the selected years and weeks
+#     if selection_type == 'Country':
+#         df_filtered = df_filtered[df_filtered['COUNTRY_AREA_TERRITORY'].isin(selection_value)]
+#     elif selection_type == 'Hemisphere':
+#         df_filtered = df_filtered[df_filtered['HEMISPHERE'].isin(selection_value)]
+#     elif selection_type == 'WHO Region':
+#         df_filtered = df_filtered[df_filtered['WHOREGION'].isin(selection_value)]
+#     # Sort by week to ensure the lines are connected sequentially
+#     df_filtered = df_filtered.sort_values(by=['ISO_YEAR', 'ISO_WEEK'])
+#     # Create the line plot
+#     fig = go.Figure()
+#     for year in years:
+#         df_year = df_filtered[df_filtered['ISO_YEAR'] == year]
+#         fig.add_trace(go.Scatter(x=df_year['ISO_WEEK'], y=df_year[subtype], mode='lines+markers', name=str(year)))
+#     # Update layout
+#     fig.update_layout(
+#         title=f"Trend of Positive Samples for {subtype} by Week",
+#         xaxis_title="Week",
+#         yaxis_title="Number of Positive Samples",
+#         hovermode="x unified"
+#     )
+#     return fig
 # Create a line plot with brush functionality (trend plot)
 def create_trend_plot(df, selection_type, selection_value, subtype, years, weeks):
-    df_filtered = df[(df['ISO_YEAR'].isin(years)) & (df['ISO_YEAR'].isin(weeks))]  # Filter data by the selected years and weeks
+    # Filter data by the selected years and weeks
+    df_filtered = df[(df['ISO_YEAR'].isin(years)) & (df['ISO_WEEK'].isin(weeks))]
+    
+    # Apply the filter based on the selection type
     if selection_type == 'Country':
         df_filtered = df_filtered[df_filtered['COUNTRY_AREA_TERRITORY'].isin(selection_value)]
     elif selection_type == 'Hemisphere':
         df_filtered = df_filtered[df_filtered['HEMISPHERE'].isin(selection_value)]
     elif selection_type == 'WHO Region':
         df_filtered = df_filtered[df_filtered['WHOREGION'].isin(selection_value)]
+    
     # Sort by week to ensure the lines are connected sequentially
     df_filtered = df_filtered.sort_values(by=['ISO_YEAR', 'ISO_WEEK'])
+    
+    # Check if data is available after filtering
+    if df_filtered.empty:
+        return go.Figure()  # Return an empty figure if no data is available
+    
     # Create the line plot
     fig = go.Figure()
     for year in years:
         df_year = df_filtered[df_filtered['ISO_YEAR'] == year]
         fig.add_trace(go.Scatter(x=df_year['ISO_WEEK'], y=df_year[subtype], mode='lines+markers', name=str(year)))
+    
     # Update layout
     fig.update_layout(
         title=f"Trend of Positive Samples for {subtype} by Week",
@@ -146,7 +180,10 @@ def create_trend_plot(df, selection_type, selection_value, subtype, years, weeks
         yaxis_title="Number of Positive Samples",
         hovermode="x unified"
     )
+    
     return fig
+
+
 
 # Streamlit layout and filters
 def create_streamlit_app():
@@ -182,10 +219,18 @@ def create_streamlit_app():
 
     ## vis 1
     st.title("Visualization of Positive Influenza Samples by Region")
+    # trend_fig = create_trend_plot(new_df_flu, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)))
+    # st.plotly_chart(trend_fig, key="trend_fig")
+    # trend_fig_positive_rate = create_trend_plot(new_df_flu_positive, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)))
+    # st.plotly_chart(trend_fig_positive_rate, key="trend_fig_positive_rate")
+ # Only keep the top trend plot
     trend_fig = create_trend_plot(new_df_flu, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)))
     st.plotly_chart(trend_fig, key="trend_fig")
-    trend_fig_positive_rate = create_trend_plot(new_df_flu_positive, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)))
-    st.plotly_chart(trend_fig_positive_rate, key="trend_fig_positive_rate")
+    
+    # Other visualizations (geoplots) remain unchanged
+    df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
+    choropleth_fig = create_choropleth(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
+    st.plotly_chart(choropleth_fig, key="choropleth_fig")
 
     ## vis 2
     df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
