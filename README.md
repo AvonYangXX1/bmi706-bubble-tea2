@@ -18,13 +18,23 @@ It includes information about influenza subtypes, regions, countries, WHO classi
 
 
 ## Getting Started
-Prerequisites
-Make sure you have Python 3.8 or later installed. You will also need the following Python libraries:
-streamlit
-pandas
-altair
-plotly
+Please create an environment with required packages specified in `requirements.txt` in conda:
 
+```
+conda create --name influenza_vis --file requirements.txt
+```
+
+Then, activate this environment:
+
+```
+conda activate influenza_vis
+```
+
+Then, run streamlit locally to visualize the data:
+
+```
+streamlit run streamlit_app.py
+```
 
 ## Visualization Features 
 **Choropleth Maps**: Map of positive influenza cases by country or region.
