@@ -20,10 +20,10 @@ It includes information about influenza subtypes, regions, countries, WHO classi
 ## Getting Started
 Please use python (>=3.8) and install packages including:
 ```
-plotly
-pandas
-streamlit
-altair
+plotly=5.24.1
+pandas=2.2.3
+streamlit=1.38.0
+altair=5.4.1
 ```
 
 Run streamlit locally to visualize the data:
