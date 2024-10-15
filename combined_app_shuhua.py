@@ -149,6 +149,7 @@ def create_trend_plot(df, selection_type, selection_value, subtype, years, weeks
     return fig
 
 # Streamlit layout and filters
+# Update the Streamlit layout and filters function
 def create_streamlit_app():
     # define some variables
     influenza_a_types = ['AH1N12009','AH1','AH3','AH5','AH7N9','ANOTSUBTYPED','ANOTSUBTYPABLE','AOTHER_SUBTYPE']
@@ -181,46 +182,34 @@ def create_streamlit_app():
     default_single_subtype = subtype_list.index('INF_B')
     selected_subtype = st.selectbox("Select Virus Subtype", options=subtype_list, index=default_single_subtype)
 
-
     ## vis 1
     st.title("Visualization of Positive Influenza Samples by Region")
-    trend_fig = create_trend_plot(new_df_flu, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1]+1)),list(range(selected_weeks[0], selected_weeks[1]+1)))
-    st.plotly_chart(trend_fig)
-    trend_fig_positive_rate = create_trend_plot(new_df_flu_positive, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1]+1)),list(range(selected_weeks[0], selected_weeks[1]+1)))
-    st.plotly_chart(trend_fig_positive_rate)
+    trend_fig = create_trend_plot(new_df_flu, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1]+1)), list(range(selected_weeks[0], selected_weeks[1]+1)))
+    st.plotly_chart(trend_fig, key="trend_fig")
+    trend_fig_positive_rate = create_trend_plot(new_df_flu_positive, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1]+1)), list(range(selected_weeks[0], selected_weeks[1]+1)))
+    st.plotly_chart(trend_fig_positive_rate, key="trend_fig_positive_rate")
 
-    
     ## vis 2
     df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
     choropleth_fig = create_choropleth(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
-    st.plotly_chart(choropleth_fig)
+    st.plotly_chart(choropleth_fig, key="choropleth_fig")
     choropleth_fig_1 = create_choropleth_positive_rate(df_filtered, f"years: {selected_years[0]} - {selected_years[1]}, weeks:{selected_weeks[0]} - {selected_weeks[1]}", selected_subtype, subtype_list)
-    st.plotly_chart(choropleth_fig_1)
+    st.plotly_chart(choropleth_fig_1, key="choropleth_fig_1")
 
     total_tested = df_filtered[selected_subtype].sum()
     st.metric(label=f"Positive Samples ({selected_subtype})", value=f"{total_tested:,}")
-    
+
     total_tested_positive = df_filtered[selected_subtype].sum()/df_filtered['SPEC_PROCESSED_NB'].sum()
-    st.metric(label=f"Positive Rate ({selected_subtype})", value=f"{total_tested_positive:,}")
-    
-    
+    st.metric(label=f"Positive Rate ({selected_subtype})", value=f"{total_tested_positive:.2%}")
+
     ## vis 3
-    # multiselect of subtypes in q3
-    subtypes = st.multiselect('Subtype',subtype_list,default=['AH1N12009'])
+    subtypes = st.multiselect('Subtype', subtype_list, default=['AH1N12009'])
 
     q3_filtered_melted_new_df = filter_data(melted_new_df, selected_years, selected_weeks, selection_type, selected_value)
     q3_filtered_melted_new_df = q3_filtered_melted_new_df[q3_filtered_melted_new_df['subtype'].isin(subtypes)]
     q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'] = pd.to_datetime(q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'])
-    # plot: use week start date to plot
-    # title
-    if selection_type == "Country":
-        st.subheader(f"Stacked Area Charts of Outbreak Trends of Influenza in Countries: ({ ', '.join(selected_value)}), Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})")
-
-    elif selection_type == "WHO Region":
-        st.subheader(f"Stacked Area Charts of Outbreak Trends of Influenza in WHO Regions: ({', '.join(selected_value)}), Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})")
-
-    else:
-        st.subheader(f"Stacked Area Charts of Outbreak Trends of Influenza in Hemispheres: ({', '.join(selected_value)}), Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})")
+    
+    st.subheader(f"Stacked Area Charts of Outbreak Trends of Influenza in {selection_type}: ({', '.join(selected_value)}), Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})")
 
     q3_count_chart = alt.Chart(q3_filtered_melted_new_df).mark_area().encode(
         x=alt.X(
@@ -235,7 +224,7 @@ def create_streamlit_app():
         ),
         y=alt.Y('sum(count):Q', title='Total Counts'),
         color='subtype:N',
-        tooltip=[alt.Tooltip('yearweek(ISO_WEEKSTARTDATE):T',title='Time '), 'sum(count):Q', 'subtype:N']
+        tooltip=[alt.Tooltip('yearweek(ISO_WEEKSTARTDATE):T', title='Time '), 'sum(count):Q', 'subtype:N']
     ).properties(
         width=800,
         height=400,
@@ -257,7 +246,7 @@ def create_streamlit_app():
         ),
         y=alt.Y('mean(positive_rate):Q', title='Average Positive Rate'),
         color='subtype:N',
-        tooltip=[alt.Tooltip('yearweek(ISO_WEEKSTARTDATE):T',title='Time '), alt.Tooltip('mean(positive_rate):Q', format=".2f"), 'subtype:N']
+        tooltip=[alt.Tooltip('yearweek(ISO_WEEKSTARTDATE):T', title='Time '), alt.Tooltip('mean(positive_rate):Q', format=".2f"), 'subtype:N']
     ).properties(
         width=800,
         height=400,
@@ -266,15 +255,13 @@ def create_streamlit_app():
 
     st.altair_chart(q3_positive_rate_chart, use_container_width=False)
 
-
     ## vis 4
-    q4_filtered_melted_new_df = melted_new_df[(melted_new_df['ISO_YEAR']>=selected_years[0]) & (melted_new_df['ISO_YEAR']<=selected_years[1]) & (melted_new_df['ISO_WEEK']>=selected_weeks[0]) & (melted_new_df['ISO_WEEK']<=selected_weeks[1])]
+    q4_filtered_melted_new_df = melted_new_df[(melted_new_df['ISO_YEAR'] >= selected_years[0]) & (melted_new_df['ISO_YEAR'] <= selected_years[1]) & (melted_new_df['ISO_WEEK'] >= selected_weeks[0]) & (melted_new_df['ISO_WEEK'] <= selected_weeks[1])]
 
-    for ind_subtype in [selected_subtype,]:
-        subtype_q4 = q4_filtered_melted_new_df[q4_filtered_melted_new_df['subtype']==ind_subtype]
+    for ind_subtype in [selected_subtype]:
+        subtype_q4 = q4_filtered_melted_new_df[q4_filtered_melted_new_df['subtype'] == ind_subtype]
         if subtype_q4['count'].sum(axis=0) == 0:
             st.write(f"Total count of positive samples is 0 for given subset (year = ({selected_years[0]} - {selected_years[1]}), subtype={ind_subtype}).")
-
         else:
             st.subheader(f"Pie Charts of Outbreak Regions of Influenza of Subtype '{ind_subtype}' in Years ({selected_years[0]} - {selected_years[1]})")
             cols = st.columns(2)
@@ -282,7 +269,7 @@ def create_streamlit_app():
             with col1:
                 pie_1 = alt.Chart(subtype_q4).mark_arc(innerRadius=50, outerRadius=90).encode(
                     theta="sum(count):Q",
-                    color=alt.Color("WHOREGION:N",title="WHO Region"),
+                    color=alt.Color("WHOREGION:N", title="WHO Region"),
                     tooltip=[
                         alt.Tooltip("sum(count):Q"),
                         alt.Tooltip("WHOREGION:N", title="WHO Region"),
@@ -297,9 +284,9 @@ def create_streamlit_app():
             with col2:
                 pie_2 = alt.Chart(subtype_q4).mark_arc(innerRadius=50, outerRadius=90).encode(
                     theta="mean(positive_rate):Q",
-                    color=alt.Color("WHOREGION:N",title="WHO Region"),
+                    color=alt.Color("WHOREGION:N", title="WHO Region"),
                     tooltip=[
-                        alt.Tooltip("mean(positive_rate):Q",format='.2f'),
+                        alt.Tooltip("mean(positive_rate):Q", format='.2f'),
                         alt.Tooltip("WHOREGION:N", title="WHO Region"),
                         alt.Tooltip("subtype:N"),
                     ]).properties(
@@ -308,6 +295,11 @@ def create_streamlit_app():
                         title=f'Average positive rates of positive samples'
                     )
                 st.altair_chart(pie_2, use_container_width=False)
+
+
+# Run the app
+if __name__ == "__main__":
+    create_streamlit_app()
 
 
 # Run the app
