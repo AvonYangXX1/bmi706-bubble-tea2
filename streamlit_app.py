@@ -214,15 +214,16 @@ def create_streamlit_app():
     subtype_list = influenza_a_types + influenza_b_types + ['INF_A', 'INF_B', 'INF_ALL']
     default_single_subtype = subtype_list.index('INF_B')
     selected_subtype = st.selectbox("Select Virus Subtype for the Line Chart and the Choropleth Map (Single Selection)", options=subtype_list, index=default_single_subtype, key="subtype_selectbox")
+    
+    st.write('Full Name of Hemisphere:  North Hemisphere (NH), South Hemisphere (SH)')
+
+    st.write('Full Name of WHO Region: African Region (AFR),Region of the Americas (AMR),South-East Asian Region (SEAR),European Region (EUR),Eastern Mediterranean Region (EMR), Western Pacific Region (WPR)')
 
     ## vis 1
     st.subheader(f"Line Chart of Positive Influenza Samples in Regions:{','.join(selected_value)} in Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})")
     trend_fig = create_trend_plot(new_df_flu, selection_type, selected_value, selected_subtype, list(range(selected_years[0], selected_years[1] + 1)), list(range(selected_weeks[0], selected_weeks[1] + 1)), subtype_list)
     st.plotly_chart(trend_fig, key="trend_fig")
-    st.write('Full Name of Hemisphere:  North Hemisphere (NH), South Hemisphere (SH)')
-
-    st.write('Full Name of WHO Region: African Region (AFR),Region of the Americas (AMR),South-East Asian Region (SEAR),European Region (EUR),Eastern Mediterranean Region (EMR), Western Pacific Region (WPR)')
-
+    
     ## vis 2
     st.subheader(f"Choropleth Map of Positive Influenza Samples in Regions: {', '.join(selected_value)} in Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})")
     df_filtered = filter_data(new_df_flu, selected_years, selected_weeks, selection_type, selected_value)
