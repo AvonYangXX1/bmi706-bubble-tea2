@@ -247,21 +247,22 @@ def create_streamlit_app():
     ## vis 3
     
     subtypes = st.multiselect('Select Virus Subtype for the Stacked Area Chart and the Pie Chart (Multiselection)', subtype_list, default=['AH1N12009'], key="subtypes_multiselect")
-    options =options
+    options = new_df_flu['COUNTRY_AREA_TERRITORY'].unique()
 
-# Determine the default index based on the presence of specific countries
-    if 'United States of America' in options:
-        default_index = options.tolist().index('United States of America')
-    elif 'NH' in options:
-        default_index = options.tolist().index('NH')
-    elif 'EUR' in options:
-        default_index = options.tolist().index('EUR')
-    else:
-        default_index = 0   
+
+# # Determine the default index based on the presence of specific countries
+#     if 'United States of America' in options:
+#         default_index = options.tolist().index('United States of America')
+#     elif 'NH' in options:
+#         default_index = options.tolist().index('NH')
+#     elif 'EUR' in options:
+#         default_index = options.tolist().index('EUR')
+#     else:
+#         default_index = 0   
 
 # Create the selectbox with the determined default index
 
-    country = st.selectbox('Select Country for the Stacked Area Chart (Single Selection)',options=options, index= default_index, key='country_selectbox')
+    country = st.selectbox('Select Country for the Stacked Area Chart (Single Selection)',options=options, index= options.tolist().index('United States of America'), key='country_selectbox')
     q3_filtered_melted_new_df = melted_new_df[(melted_new_df['ISO_YEAR'].isin(list(range(selected_years[0], selected_years[1] + 1)))) & (melted_new_df['ISO_WEEK'].isin(list(range(selected_weeks[0], selected_weeks[1] + 1)))) & (melted_new_df['subtype'].isin(subtypes)) & (melted_new_df['COUNTRY_AREA_TERRITORY']==country)]
     q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'] = pd.to_datetime(q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'])
     
