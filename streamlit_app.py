@@ -267,7 +267,7 @@ def create_streamlit_app():
     
     st.subheader(f"Stacked Area Charts of Outbreak Trends of Influenza in {country}, Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})")
     if q3_filtered_melted_new_df.empty:
-        st.wrtie('Only Supports Country Selection for the Stacked Chart')
+        st.write('Only Supports Country Selection for the Stacked Chart')
       #  st.write(f'No positive samples for Subtypes: {", ".join(subtypes)}, Country: {country}, Years: ({selected_years[0]} to {selected_years[1]}) and Weeks: ({selected_weeks[0]} to {selected_weeks[1]})!')
     else:
         # add brush to link the two charts
