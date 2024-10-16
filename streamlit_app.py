@@ -210,16 +210,6 @@ def create_streamlit_app():
         options = new_df_flu['WHOREGION'].unique()
         selected_value = st.multiselect("Select WHO Region for the Line Chart and the Choropleth Map (Multiselection)", options=options, default=options, key="region_multiselect")
     
-    if selection_type == "Country":
-        options_2 = new_df_flu['COUNTRY_AREA_TERRITORY'].unique()
-        selected_value = st.multiselect("Select Country/Region for the Line Chart and the Choropleth Map (Multiselection)", options=options_2, default=default_countries, key="country_multiselect_2")
-    elif selection_type == "Hemisphere":
-        options_2 = new_df_flu['COUNTRY_AREA_TERRITORY'].unique()
-        selected_value = st.multiselect("Select Country/Region for the Line Chart and the Choropleth Map (Multiselection)", options=options_2, default=default_countries, key="country_multiselect_3")
-    elif selection_type == "WHO Region":
-        options_2 = new_df_flu['COUNTRY_AREA_TERRITORY'].unique()
-        selected_value = st.multiselect("Select Country/Region for the Line Chart and the Choropleth Map (Multiselection)", options=options_2, default=default_countries, key="country_multiselect_4")
-    
     
     subtype_list = influenza_a_types + influenza_b_types + ['INF_A', 'INF_B', 'INF_ALL']
     default_single_subtype = subtype_list.index('INF_B')
@@ -253,7 +243,7 @@ def create_streamlit_app():
     ## vis 3
     
     subtypes = st.multiselect('Select Virus Subtype for the Stacked Area Chart and the Pie Chart (Multiselection)', subtype_list, default=['AH1N12009'], key="subtypes_multiselect")
-    country = st.selectbox('Select Country for the Stacked Area Chart (Single Selection)',options=options_2, index=options.tolist().index('United States of America'), key='country_selectbox')
+    country = st.selectbox('Select Country for the Stacked Area Chart (Single Selection)',options=options, index=options.tolist().index('United States of America'), key='country_selectbox')
     q3_filtered_melted_new_df = melted_new_df[(melted_new_df['ISO_YEAR'].isin(list(range(selected_years[0], selected_years[1] + 1)))) & (melted_new_df['ISO_WEEK'].isin(list(range(selected_weeks[0], selected_weeks[1] + 1)))) & (melted_new_df['subtype'].isin(subtypes)) & (melted_new_df['COUNTRY_AREA_TERRITORY']==country)]
     q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'] = pd.to_datetime(q3_filtered_melted_new_df['ISO_WEEKSTARTDATE'])
     
