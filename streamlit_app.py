@@ -212,13 +212,13 @@ def create_streamlit_app():
     
     if selection_type == "Country":
         options_2 = new_df_flu['COUNTRY_AREA_TERRITORY'].unique()
-        selected_value = st.multiselect("Select Country/Region for the Line Chart and the Choropleth Map (Multiselection)", options=options_2, default=default_countries, key="country_multiselect")
+        selected_value = st.multiselect("Select Country/Region for the Line Chart and the Choropleth Map (Multiselection)", options=options_2, default=default_countries, key="country_multiselect_2")
     elif selection_type == "Hemisphere":
         options_2 = new_df_flu['COUNTRY_AREA_TERRITORY'].unique()
-        selected_value = st.multiselect("Select Country/Region for the Line Chart and the Choropleth Map (Multiselection)", options=options_2, default=default_countries, key="country_multiselect")
+        selected_value = st.multiselect("Select Country/Region for the Line Chart and the Choropleth Map (Multiselection)", options=options_2, default=default_countries, key="country_multiselect_3")
     elif selection_type == "WHO Region":
         options_2 = new_df_flu['COUNTRY_AREA_TERRITORY'].unique()
-        selected_value = st.multiselect("Select Country/Region for the Line Chart and the Choropleth Map (Multiselection)", options=options_2, default=default_countries, key="country_multiselect")
+        selected_value = st.multiselect("Select Country/Region for the Line Chart and the Choropleth Map (Multiselection)", options=options_2, default=default_countries, key="country_multiselect_4")
     
     
     subtype_list = influenza_a_types + influenza_b_types + ['INF_A', 'INF_B', 'INF_ALL']
