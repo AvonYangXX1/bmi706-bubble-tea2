@@ -41,22 +41,30 @@ streamlit run streamlit_app.py
 ```
 
 ## Visualization Features 
-**Choropleth Maps**: Map of positive influenza cases by country or region.
-<img width="637" alt="Screenshot 2024-10-15 at 11 11 53 AM" src="https://github.com/user-attachments/assets/47109e80-007d-4766-bdec-9dcfb2e9f3e9">
+**Choropleth Maps**: Map of positive influenza cases by country or region, we have both the total number of count and the %positive sample rate
+<img width="642" alt="Screenshot 2024-10-17 at 1 25 56 PM" src="https://github.com/user-attachments/assets/2b1c6092-ea9a-42ee-8ea5-b1076c7bf8b0">
+<img width="573" alt="Screenshot 2024-10-17 at 1 26 05 PM" src="https://github.com/user-attachments/assets/4b91931d-1d6c-4127-9950-0aca5800817e">
+
+
 
 
 
 
 **Trend Line Plot**: Line plot showing the trend of positive influenza cases over weeks and years.
-<img width="580" alt="Screenshot 2024-10-15 at 11 13 55 AM" src="https://github.com/user-attachments/assets/654301b1-fcf2-4bac-96db-b7cd224a4832">
+<img width="653" alt="Screenshot 2024-10-17 at 1 26 19 PM" src="https://github.com/user-attachments/assets/e7772b5e-4e4d-442f-b94e-da6f2bd40f17">
+The users can also use the vertical line to view at one speicfic week what is the total number of the cases sum across different countries
+
+<img width="616" alt="Screenshot 2024-10-17 at 1 26 54 PM" src="https://github.com/user-attachments/assets/58538214-7edf-49fa-b007-8118d69179a5">
 
 
 **Stacked Area Charts**: Area charts displaying the distribution of positive cases for various influenza subtypes.
-<img width="689" alt="Screenshot 2024-10-15 at 11 14 11 AM" src="https://github.com/user-attachments/assets/6a9caa62-c214-4fb6-9f0c-a8e10c59e6f4">
+<img width="638" alt="Screenshot 2024-10-17 at 1 27 11 PM" src="https://github.com/user-attachments/assets/ab0a1530-48bc-4a79-a064-f3e484bda66d">
+<img width="558" alt="Screenshot 2024-10-17 at 1 27 21 PM" src="https://github.com/user-attachments/assets/9f78b02f-4da1-44b0-9d7e-367a41605476">
 
 
 **Pie Charts**: Pie charts showing the regional distribution of positive cases and positive rates.
-<img width="586" alt="Screenshot 2024-10-15 at 11 14 13 AM" src="https://github.com/user-attachments/assets/edf59ced-9910-416f-81c6-b0f33147eeb1">
+<img width="557" alt="Screenshot 2024-10-17 at 1 27 29 PM" src="https://github.com/user-attachments/assets/3346714d-f3f9-4978-a56a-a90f79a30faa">
+
 
 ## User Selection 
 The dashboard provides interactive filtering options that allow users to customize the data visualization according to their specific needs. Users can:
