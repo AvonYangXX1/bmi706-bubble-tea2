@@ -61,6 +61,10 @@ The users can also use the vertical line to view at one speicfic week what is th
 <img width="638" alt="Screenshot 2024-10-17 at 1 27 11 PM" src="https://github.com/user-attachments/assets/ab0a1530-48bc-4a79-a064-f3e484bda66d">
 <img width="558" alt="Screenshot 2024-10-17 at 1 27 21 PM" src="https://github.com/user-attachments/assets/9f78b02f-4da1-44b0-9d7e-367a41605476">
 
+The interactive features are using the brush to select the certain time window 
+<img width="586" alt="Screenshot 2024-10-17 at 1 28 51 PM" src="https://github.com/user-attachments/assets/71052f1c-3fb6-4c17-8f7a-3bbe0d8cba8d">
+
+
 
 **Pie Charts**: Pie charts showing the regional distribution of positive cases and positive rates.
 <img width="557" alt="Screenshot 2024-10-17 at 1 27 29 PM" src="https://github.com/user-attachments/assets/3346714d-f3f9-4978-a56a-a90f79a30faa">
